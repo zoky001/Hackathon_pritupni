@@ -16,8 +16,80 @@ angular.module('myApp.login', ['ngRoute'])
 
                 $scope.proba = "Dobar dan";
                 console.log("login");
-                console.log(item.currentTarget.getAttribute("data-id"));
-                sendFirebaseNotification("porkuaa");
+                console.log("register_hack");
+
+
+                var data = {
+                    "Teamname": $scope.name,
+                    "Password": $scope.password,
+
+                };
+
+
+
+                var config9 = {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+
+                    }
+                }
+
+
+                console.log("ispis:" + JSON.stringify(data));
+
+
+                /*
+                 var ser = function(obj, prefix) {
+                 var str = [], p;
+                 for(p in obj) {
+                 if (obj.hasOwnProperty(p)) {
+                 var k = prefix ? prefix + "[" + p + "]" : p, v = obj[p];
+                 str.push((v !== null && typeof v === "object") ?
+                 ser(v, k) :
+                 encodeURIComponent(k) + "=" + encodeURIComponent(v));
+                 }
+                 }
+                 return str.join("&");
+                 };*/
+
+                console.log("QUERY:" + jQuery.param(data));
+                $http({
+                    method: 'POST',
+                    url: "http://52.233.158.172/change/api/hr/account/login",
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    transformRequest: function (obj) {
+                        var str = [];
+                        for (var p in obj) {
+                            if (obj.hasOwnProperty(p)) {
+                                console.log("P je iznosi: " + p);
+                                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+
+                            }
+                        }
+
+                        console.log("rezultat : " + str.join("&"));
+
+                        return jQuery.param(obj);
+
+                        //  return str.join("&");
+                    },
+                    data: data
+
+                }).then(function mySuccess(response) {
+
+                    alert("Uspješna prijava!");
+                    var json = response.data.Result;
+                   
+                   
+                    console.log('uspjeh' + (JSON.parse(response.data.Result)).TeamId);
+                }, function myError(response) {
+                    alert("Neuspješna prijava!! \n" + response.data.Result.TeamId);
+                    console.log('greška' + JSON.stringify(response));
+
+                });
+
+
+
 
             }
 
