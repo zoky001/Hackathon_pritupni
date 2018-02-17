@@ -14,6 +14,26 @@ angular.module('myApp.login', ['ngRoute'])
             $("#dohvatiDetalje").click(function () {
 
                 console.log("KLIK queryyyy");
+                
+var data = null;
+
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener("readystatechange", function () {
+  if (this.readyState === 4) {
+    console.log(this.responseText);
+  }
+});
+
+xhr.open("GET", "http://52.233.158.172/change/api/hr/team/details/25/");
+xhr.setRequestHeader("x-authorization", "Q29hbGVzY2U6Og==");
+xhr.setRequestHeader("cache-control", "no-cache");
+
+xhr.setRequestHeader("Access-Control-Allow-Origin", "http://52.233.158.172");
+xhr.setRequestHeader("postman-token", "2201692d-8ff7-e539-44aa-62c1f96f0830");
+
+xhr.send(data);
                 /*
                  $.ajax({
                  type: "GET",
@@ -29,7 +49,7 @@ angular.module('myApp.login', ['ngRoute'])
                  
                  });*/
 
-                $.ajax({
+             /*   $.ajax({
 
                     // The 'type' property sets the HTTP method.
                     // A value of 'PUT' or 'DELETE' will trigger a preflight request.
@@ -72,7 +92,7 @@ angular.module('myApp.login', ['ngRoute'])
                         // information about the error.
                     }
                 });
-
+*/
                 /*  $.ajax({
                  url: "http://52.233.158.172/change/api/hr/team/details/25",
                  type: 'GET',
@@ -181,26 +201,46 @@ angular.module('myApp.login', ['ngRoute'])
                         })
                     });
 
+var ID = (JSON.parse(response.data.Result)).TeamId;
+var key = (JSON.parse(response.data.Result)).AuthorizationToken;
                     // GETs are simple, 
                     $http({
-                        url: "http://52.233.158.172/change/api/hr/team/details/25",
+                        url: "http://localhost/Hackathon_pristupni/getData.php?id="+ID+"&key="+key,
                         method: "GET",
-                        data: [],
-                         headers: {'X-Authorization': (JSON.parse(response.data.Result)).AuthorizationToken,
+                    }).then(function mySuccess(response) {
 
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        params: {foo: $scope.foo}
-                    }).then(function mySuccess(data, status) {
+                       // alert("Uspješno dohvaćeni podatci!");
+                        console.log(response.data);
+                        
+                         $scope.nameDet = (JSON.parse(response.data.Result)).TeamName;
+                     
+                  
 
-                        alert("Uspješno dohvaćeni podatci!");
-                        var json = response.data.Result;
- $scope.response = "GET Response: " + JSON.stringify(data.args);
-                        $scope.fullResponse = JSON.stringify(data);
-                    }, function myError(data, status) {
-                        alert("Neuspješna prijava!! \n");
-                       $scope.response = "GET Response: " + JSON.stringify(data.args);
-                        $scope.fullResponse = JSON.stringify(data);
+                            $scope.name_member_1 =(JSON.parse(response.data.Result)).Members[0].Name;
+                             $scope.surname_member_1 = (JSON.parse(response.data.Result)).Members[0].Surname;
+                           $scope.mail_1 = (JSON.parse(response.data.Result)).Members[0].Mail;
+                      
+
+                             $scope.name_member_2 =(JSON.parse(response.data.Result)).Members[1].Name;
+                             $scope.surname_member_2 = (JSON.parse(response.data.Result)).Members[1].Surname;
+                           $scope.mail_2 = (JSON.parse(response.data.Result)).Members[1].Mail;
+                      
+                            $scope.name_member_3 = (JSON.parse(response.data.Result)).Members[2].Name;
+                            $scope.surname_member_3 = (JSON.parse(response.data.Result)).Members[2].Surname;
+                           $scope.mail_3 =(JSON.parse(response.data.Result)).Members[2].Mail;
+                        
+
+                             $scope.name_member_4 = (JSON.parse(response.data.Result)).Members[3].Name;
+                             $scope.surname_member_4 = (JSON.parse(response.data.Result)).Members[3].Surname;
+                             $scope.mail_4 = (JSON.parse(response.data.Result)).Members[3].Mail;
+                        
+                        
+                        
+                        
+                     
+                    }, function myError(response) {
+                      //  alert("Neuspješna prijava!! \n");
+                    
 
                     });
                             
@@ -255,7 +295,7 @@ angular.module('myApp.login', ['ngRoute'])
 
                     //detail_end
                 }, function myError(response) {
-                    alert("Neuspješna prijava!! \n" + response.data.Result.TeamId);
+                    alert("Neuspješna prijava!! \n");
                     console.log('greška' + JSON.stringify(response));
 
                 });
